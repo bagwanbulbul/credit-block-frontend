@@ -147,6 +147,8 @@
     border-radius: 50%;
     margin-right: 11px;
     width: 40px;
+    height: 40px;
+    /* object-fit: cover; */
     position: relative;
     margin: auto;
     border: 2px solid #aaccfb;
@@ -707,6 +709,7 @@
     border-radius: 50%;
     margin-right: 11px;
     width: 100px;
+    height: 100px;
     display: block;
     margin: auto;
     border: 3px solid #e1e3ea;
@@ -883,6 +886,19 @@
 }
 
 
+
+/* element.style {
+    height: 34px;
+    width: 34px;
+    background-color: green;
+    color: white;
+    border-radius: 0px 0px 0px 50px;
+    font-size: 12px;
+    text-align: center;
+    padding-top: 5px;
+    padding-left: 6px;
+}
+ */
 
 
   

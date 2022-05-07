@@ -12,25 +12,39 @@ function UserProfile() {
     const [firstname, setFirstName] = useState("")
     const [lastname, setLastName] = useState("")
     const [isEdit, setIsEdit] = useState(false)
-    const [MyProfile, setProfile] = useState()
-
+    const [MyProfile, setProfile] = useState();
+    const [image, setImage] = useState("");
+    const [imageprev, setImageprev] = useState("");
+    
     const loggedInUser = JSON.parse(sessionStorage.getItem("userInfo"));
-    // let firstName = userToken.data.first_name;
-    // let lastName = userToken.data.last_name;
-    // let userId = userToken.data._id;
+
+    async function handleChange(e) {
+        var formData = new FormData();
+        console.log("lllllllllllllllllll")
+        const config = {
+            headers: {
+              Authorization: `Bearer ${loggedInUser.accessToken}`,
+              'Content-Type': 'multipart/form-data',
+            },
+          };
+        setImageprev(URL.createObjectURL(e.target.files[0]));
+
+        formData.append("image",e.target.files[0]);
+        console.log("image",e.target.files[0])
+
+        var a = formData.getAll("image")
+        console.log("aaaaaaaa",a)
+       
+        var data = await axios.post("http://148.72.244.170:3000/uploadImage",formData ,config)
+        console.log("datadatadatadatadata",data)
+    }
 
    
     const edit_Profile = () => {
         setIsEdit(true)
-       
-        // setFirstName(firstName)
-        // setLastName(lastName)
     }
-
     const update_Profile = async () => {
 
-
-        console.log("jhjhkhkjhk",firstname,lastname)
         const config = {
             headers: {
               Authorization: `Bearer ${loggedInUser.accessToken}`,
@@ -40,12 +54,15 @@ function UserProfile() {
             first_name:firstname,last_name:lastname}, config
         ) 
         console.log("userProfile",userProfile)
-        // console.log("user profile id", userId)
-        // let data = {firstname, lastname}
-        // console.log("ooooooooooo");
-        // navigate("/chat");
-    }
 
+        // setImage(e.target.files[0])
+
+        // formData.append("image",image);
+        // console.log("image",image)
+       
+        // var data = await axios.post("http://148.72.244.170:3000/uploadImage",formData ,config)
+        // console.log("datadatadatadatadata",data)
+    }
     const getProfile = async () =>{
         var result = await axios.post("http://148.72.244.170:3000/getUser", {"id" : loggedInUser._id
         })
@@ -59,8 +76,9 @@ function UserProfile() {
         if(result.data.data.role === 3){
             result.data.data.role = "Supervisor";
         }
-        // console.log("myProfileeeeeeeee",result.data.data)
+        console.log("myProfileeeeeeeee",result.data.data)
         setProfile(result.data.data)
+        setImageprev(result.data.data.pic)
        
     }
     useEffect(() => {
@@ -82,10 +100,18 @@ function UserProfile() {
                                     <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
                                         <Form.Label column sm="4">
                                             <div className="edit_profile_img">
-                                                <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="profile_pic" className='img-fluid' />
-                                                <div class="wrapper">
-                                                    <div class="file-upload">
-                                                        <input type="file" />
+                                                <img src={imageprev} alt="profile_pic" className='img-fluid' />
+                                                <div className="wrapper">
+                                                    <div className="file-upload">
+                                                    <input type="file" id='profile_image' name='profile_image'
+                                                    onChange={handleChange}
+                                                    //  onChange={(e)=>{
+                                                    //     setImage(e.target.files[0])
+                                                    //     setImageprev(URL.createObjectURL(e.target.files[0]));
+
+                                                    //     }}
+                                                     />
+                                                   
                                                         <BsCameraFill />
                                                     </div>
                                                 </div>
@@ -145,8 +171,13 @@ function UserProfile() {
                                             ))}
                                         </div>
                                     </div>
+                                   
                                     <div className="profile_img">
-                                        <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="profile_pic" className='img-fluid' />
+                                    {MyProfile ?<img src={MyProfile.pic} alt="profile_pic" className='img-fluid' />
+                                    :
+                                    <img src="" alt="profile_pic" className='img-fluid' />
+                                    }
+                                        
                                     </div>
                                     <div className="profile_content">
                                         { MyProfile? 

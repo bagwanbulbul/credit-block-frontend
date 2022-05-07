@@ -186,6 +186,7 @@ function Chat() {
 
        
         setUserChat(xyz.data.message)
+      
       }).catch(err => {
         console.log("chat msg err", err)
       })
@@ -340,8 +341,12 @@ function Chat() {
                               <div className='active_user_icon' style={{ display: "none" }}></div>
                               <div className="user_img">
                                 {/* <Avatar name={e.first_name+" "+e.last_name} maxInitials={2}/> */}
+                                <div>
                                 <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="" width="45px" />
                                 <span className='name_font'>{chatData.reciver_name}</span>
+                                </div>
+                               
+                                <div >12</div>
                               </div>
                             </ListGroup>
                           </div>
