@@ -99,9 +99,6 @@ function SignUp() {
                     $("#passwordmismatch").show()
                 } 
 
-                // if (response.data.statusCode === 402) {
-                //     $("#emailcheck").show()
-                // } 
 
                 if (response.data.statusCode === 403) {
                     $("#rolecheck").show()
@@ -112,7 +109,12 @@ function SignUp() {
                     // if(!response.data.data){
                     //     $("#emailcheck").show()
                     // }else{
-                        userId = response.data._id
+                        if(response.data._id === undefined){
+                            userId = response.data.data._id
+                        }else{
+                            userId = response.data._id
+                        }
+                        // userId = response.data._id
                         console.log("user id", userId)
                         toast.success('Your Registration Successfully done ', {
                             position: "top-center",

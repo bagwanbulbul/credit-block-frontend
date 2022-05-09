@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
+import { FaPaperPlane, FaSpinner } from 'react-icons/fa';
+
 import Header from '../../common/Header';
 import { Link, useNavigate } from 'react-router-dom';
 import $ from 'jquery';
@@ -15,6 +17,8 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     let History = useNavigate()
+    const [loading, setLoading] = useState(false)
+
 
     useEffect(() => {
         $("#password1").hide()
@@ -42,6 +46,7 @@ function Login() {
 
 
     const submitHander = async () => {
+        setLoading(true)
 
         if (!email) {
             $("#email1").show();
@@ -57,23 +62,24 @@ function Login() {
                 },
             };
 
-            role= role.split("=")[1]
+            role = role.split("=")[1]
             console.log("role", role)
 
-            const { data } = await axios.post("http://148.72.244.170:3000/userlogin", {role ,email, password }, config);
+            const { data } = await axios.post("http://148.72.244.170:3000/userlogin", { role, email, password }, config);
 
             console.log("data", data)
+            setLoading(false)
 
             // insession store login user data in userInfo key 
-           if(data){
-            sessionStorage.setItem("userInfo", JSON.stringify(data));
-           }
+            if (data) {
+                sessionStorage.setItem("userInfo", JSON.stringify(data));
+            }
 
-           if(data.statusCode === 203){
-               $("#verifyemail").show();
-           }
+            if (data.statusCode === 203) {
+                $("#verifyemail").show();
+            }
 
-            if (data.statusCode === 401) { 
+            if (data.statusCode === 401) {
                 $("#emailcheck").show();
                 // $("#email1").hide();
             }
@@ -91,11 +97,11 @@ function Login() {
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
-                    theme:"colored"
+                    theme: "colored"
                 });
-                setTimeout(()=>{
+                setTimeout(() => {
                     History('/');
-                },3000)
+                }, 3000)
             }
 
             if (data.statusCode === 200) {
@@ -109,7 +115,7 @@ function Login() {
 
 
     }
-    
+
     useEffect(() => {
         const user = JSON.parse(sessionStorage.getItem("userInfo"))
         // console.log(" login user info", user)
@@ -126,6 +132,9 @@ function Login() {
                 <Row>
                     <Col lg={{ span: 6, offset: 3 }} md={{ span: 8, offset: 2 }}>
                         <div className="login_form mt-5">
+                            <div className='loader' style={loading ? {display:"flex" }:{display:"none"}}>
+                                <FaSpinner icon="spinner" className="spinner" />
+                            </div>
                             <div className="heading">
                                 <h3>Login</h3>
                             </div>
@@ -151,7 +160,6 @@ function Login() {
                                     </Button>
                                 </div>
 
-
                                 <Link to="/sign_up"><p className='signup_account'>Don't have an account? <span>Sign Up</span></p></Link>
                             </div>
                         </div>
@@ -169,7 +177,7 @@ function Login() {
                 draggable
                 pauseOnHover
             />
-       
+
         </>
     )
 }

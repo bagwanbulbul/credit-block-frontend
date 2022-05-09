@@ -22,7 +22,7 @@ function App() {
     <div className="App">
 
       {/* <Page/> */}
-      <BrowserRouter>
+      <BrowserRouter basename='/crediblockhyperledger/'>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
 import { BsArrowLeft } from 'react-icons/bs';
 import Picker from 'emoji-picker-react';
-import { FaPaperPlane,FaSpinner  } from 'react-icons/fa';
+import { FaPaperPlane, FaSpinner } from 'react-icons/fa';
 import { FiSmile } from 'react-icons/fi';
 import $ from 'jquery';
 import axios from 'axios';
@@ -34,19 +34,19 @@ function Chat() {
   const handleShow = () => setShow(true);
   let History = useNavigate()
 
-  
-  useEffect(()=> {
+
+  useEffect(() => {
     console.log(loggedInUser)
-    if(!loggedInUser || loggedInUser === null ){
+    if (!loggedInUser || loggedInUser === null) {
       History("/Login.jsx")
     }
-    
-    if(loggedInUser.role === 3){
+
+    if (loggedInUser.role === 3) {
       $("#chat_bar").hide()
       $("#searchUser").hide();
     }
-     
-    
+
+
   })
 
 
@@ -107,10 +107,10 @@ function Chat() {
 
       await axios.post("http://148.72.244.170:3000/chat/createChat", { userId }, config).then(res => {
 
-      // console.log("res", res)
-        console.log("res.data",res.data)
-        if(res.data.statusCode === 200 && res.data.statusMsg === 'Chat already Created'){
-          console.log("'Chat already Created'",res.data.Chat)
+        // console.log("res", res)
+        console.log("res.data", res.data)
+        if (res.data.statusCode === 200 && res.data.statusMsg === 'Chat already Created') {
+          console.log("'Chat already Created'", res.data.Chat)
         }
         // setSelectedUserChat(chatId);
         setChatUserName()
@@ -172,6 +172,7 @@ function Chat() {
     console.log("Chat Id selected user ----", chatId, username)
     setSelectedUserChat(chatId);
     setChatUserName(username)
+  
     try {
       const config = {
         headers: {
@@ -181,12 +182,12 @@ function Chat() {
 
       // console.log("config for fetching user chat", config)
 
-      await axios.post(`http://148.72.244.170:3000/message/allMessages`,{chatId}, config).then(xyz => {
+      await axios.post(`http://148.72.244.170:3000/message/allMessages`, { chatId }, config).then(xyz => {
         console.log("chat msg res", xyz.data)
 
-       
+
         setUserChat(xyz.data.message)
-      
+       
       }).catch(err => {
         console.log("chat msg err", err)
       })
@@ -205,9 +206,9 @@ function Chat() {
 
 
   //=============function for  send messages============
-
+  
   const sendMessage = async () => {
-
+  
     try {
       const config = {
         headers: {
@@ -215,7 +216,7 @@ function Chat() {
         },
       };
 
-      console.log("selectedUserChat",selectedUserChat)
+      console.log("selectedUserChat", selectedUserChat)
       // console.log("newMessage",newMessage)
 
       const data = await axios.post("http://148.72.244.170:3000/message/sendMessage", {
@@ -224,10 +225,11 @@ function Chat() {
       }, config)
 
       console.log("send Message data:", data.data.message);
-  
-     
+
+
       setUserChat(data.data.message)
       console.log("messageeeeeeeeeeee:", data.data.message);
+   
       // setUserChat(data.data.message)
 
       // axios.post(`http://148.72.244.170:3000/message/allMessages`,{selectedUserChat}, config).then(xyz => {
@@ -250,10 +252,10 @@ function Chat() {
     }
   }
 
-//=============function for emoji icons============
+  //=============function for emoji icons============
   const onEmojiClick = (event, emojiObject) => {
     setNewMessage(prevInput => prevInput + emojiObject.emoji);
-    
+
   };
 
   return (
@@ -292,27 +294,28 @@ function Chat() {
                           <div className='loader' style={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
                             <FaSpinner icon="spinner" className="spinner" />
                           </div>
-                          :
-                        
-                            <div className="user_list p-2 "><div> </div>
-                              {searchData && searchData.map((e, i) => {
-                                return (
-                                  <ListGroup variant="" key={i}>
-                                    <ListGroup.Item >
-                                      <div className="users" onClick={() => createChat(e._id)}>
-                                        <div className="user_img">
-                                          <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="" width="45px" /><span>{e.first_name} {e.last_name}</span>
-                                        </div>
 
+                          :
+
+                          <div className="user_list p-2 "><div> </div>
+                            {searchData && searchData.map((e, i) => {
+                              return (
+                                <ListGroup variant="" key={i}>
+                                  <ListGroup.Item >
+                                    <div className="users" onClick={() => createChat(e._id)}>
+                                      <div className="user_img">
+                                        <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="" width="45px" /><span>{e.first_name} {e.last_name}</span>
                                       </div>
-                                    </ListGroup.Item>
-                                  </ListGroup>
-                                )
-                              })}
-                            </div>
-                            }
-                        </
-                        Col>
+
+                                    </div>
+                                  </ListGroup.Item>
+                                </ListGroup>
+                              )
+                            })}
+                          </div>
+                        }
+                      </
+                      Col>
                     </Row>
 
                   </Offcanvas.Body>
@@ -331,46 +334,45 @@ function Chat() {
 
                     {chats ?
                       <div>
-                       
-                      {
-                       
-                      chats.map((chatData, index) => {
-                        return (
-                          <div>
-                            <ListGroup variant="" onClick={() => fetchMessage(chatData._id, chatData.reciver_name)} key={index}>
-                              <div className='active_user_icon' style={{ display: "none" }}></div>
-                              <div className="user_img">
-                                {/* <Avatar name={e.first_name+" "+e.last_name} maxInitials={2}/> */}
-                                <div>
-                                <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="" width="45px" />
-                                <span className='name_font'>{chatData.reciver_name}</span>
-                                </div>
-                               
-                                <div >12</div>
+
+                        {
+
+                          chats.map((chatData, index) => {
+                            return (
+                              <div>
+                                <ListGroup variant="" onClick={() => fetchMessage(chatData._id, chatData.reciver_name)} key={index}>
+                                  <div className='active_user_icon' style={{ display: "none" }}></div>
+                                  <div className="user_img">
+                                    {/* <Avatar name={e.first_name+" "+e.last_name} maxInitials={2}/> */}
+                                    <div>
+                                      <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="" width="45px" />
+                                      <span className='name_font'>{chatData.reciver_name}</span>
+                                    </div>
+
+                                  </div>
+                                </ListGroup>
                               </div>
-                            </ListGroup>
-                          </div>
-                          // <ListGroup variant="" onClick={() => fetchMessage(chatData._id, chatData.users)} key={index}>
-                            // <ListGroup.Item>
-                            //   <div>{chatData.users.map((e, i) => {
-                            //     if (loggedInUser.data._id !== e._id) {
-                            //       return (
-                            //         <div className="users" key={i}>
-                            //           <div className='active_user_icon' style={{ display: "none" }}></div>
-                                      // <div className="user_img">
-                                      //   {/* <Avatar name={e.first_name+" "+e.last_name} maxInitials={2}/> */}
-                                      //   <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="" width="45px" />
-                                      //   <span className='name_font'>{e.first_name} {e.last_name}</span>
-                                      // </div>
-                            //         </div>
-                            //       )
-                            //     }
-                            //   })}</div>
-                            // </ListGroup.Item>
-                          // </ListGroup>
-                        )
-                      })
-                    }
+                              // <ListGroup variant="" onClick={() => fetchMessage(chatData._id, chatData.users)} key={index}>
+                              // <ListGroup.Item>
+                              //   <div>{chatData.users.map((e, i) => {
+                              //     if (loggedInUser.data._id !== e._id) {
+                              //       return (
+                              //         <div className="users" key={i}>
+                              //           <div className='active_user_icon' style={{ display: "none" }}></div>
+                              // <div className="user_img">
+                              //   {/* <Avatar name={e.first_name+" "+e.last_name} maxInitials={2}/> */}
+                              //   <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="" width="45px" />
+                              //   <span className='name_font'>{e.first_name} {e.last_name}</span>
+                              // </div>
+                              //         </div>
+                              //       )
+                              //     }
+                              //   })}</div>
+                              // </ListGroup.Item>
+                              // </ListGroup>
+                            )
+                          })
+                        }
                       </div>
                       :
                       <div className='row'>
@@ -408,41 +410,45 @@ function Chat() {
                 <div className="chat_room">
                   {selectedUserChat ?
                     <div className="chatMsg">
-                    { userChat ? 
+                      {userChat ?
                         userChat.map((e) => {
-                            // console.log("e",e)
+                          // console.log("e",e)
 
-                            if(loggedInUser._id === e.sender_id){
-                              return ( 
-                                <div className="message">
-                                  <div className="odd-blurb">
-                                    <p>{e.content}</p>
-                                  </div>
+                          if (loggedInUser._id === e.sender_id) {
+                            return (
+                              <div className="message">
+                                <div className="odd-blurb">
+                                  <p>{e.content}</p>
                                 </div>
-                              )
-                            }if(loggedInUser.role === 3 && e.sender_id === e.users[1]){
-                              return ( 
-                                <div className="message">
-                                  <div className="odd-blurb">
-                                    <p>{e.content}</p>
-                                  </div>
+                              </div>
+                            )
+                          } if (loggedInUser.role === 3 && e.sender_id === e.users[1]) {
+                            return (
+                              <div className="message">
+                                <div className="odd-blurb">
+                                  <p>{e.content}</p>
                                 </div>
-                              )
-                            }
-                            else{
-                              return (
-                                <div className="message">
-                                  <div className="blurb">
-                                    <p>{e.content}</p>
-                                  </div>
+                              </div>
+                            )
+                          }
+                          else {
+                            return (
+                              <div className="message">
+                                <div className="blurb">
+                                  <p>{e.content}</p>
                                 </div>
-                              )
-                            }
+                              </div>
+                            )
+                          }
                         })
-                       : 
-                      <div>
-                      <p>waiting.............</p>
-                      </div>
+                        :
+
+
+                     
+                        <div className='loader' style={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
+                          <FaSpinner icon="spinner" className="spinner" />
+                        </div>
+
                       }
                     </div>
                     :

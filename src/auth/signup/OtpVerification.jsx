@@ -6,9 +6,14 @@ import axios from 'axios';
 import $ from 'jquery';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FaPaperPlane, FaSpinner } from 'react-icons/fa';
+
+
 
 function OtpVerification() {
     let History = useNavigate()
+
+    const [loading, setLoading] = useState(false)
     const location = useLocation();
     const { pathname } = location;
     const userId = pathname.substr(pathname.lastIndexOf('/') + 1);
@@ -29,6 +34,7 @@ function OtpVerification() {
     })
 
     const submit = async() => {
+        setLoading(true)
         if (!otp) {
             $("#otpError1").show()
         }
@@ -41,6 +47,8 @@ function OtpVerification() {
             };
            const {data} = await axios.post("http://148.72.244.170:3000/verify_email_otp", {otp:otp, "_id":userId}, config);
                 console.log("otp res", data)
+                setLoading(false)
+
 
                 if(data.statusCode === 401){
                     $("#otpError2").show();
@@ -65,6 +73,7 @@ function OtpVerification() {
 
                     var obj = {
                         accessToken:data.data.accessToken,
+                        _id: data.data._id,
                         first_name:data.data.first_name,
                         last_name: data.data.last_name,
                         role:data.data.role,
@@ -105,6 +114,9 @@ function OtpVerification() {
                             <div className="heading">
                                 <h3>OTP Verification</h3>
                             </div>
+                            <div className='loader' style={loading ? {display:"flex" }:{display:"none"}}>
+                            <FaSpinner icon="spinner" className="spinner" />
+                        </div>
                             <div className="login_inputs mt-3">
                             <div className="otp_container" >
                                  
